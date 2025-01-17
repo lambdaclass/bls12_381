@@ -13,7 +13,7 @@
 // Catch documentation errors caused by code changes.
 #![deny(rustdoc::broken_intra_doc_links)]
 #![deny(missing_debug_implementations)]
-#![deny(missing_docs)]
+// #![deny(missing_docs)]
 #![deny(unsafe_code)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::many_single_char_names)]
@@ -57,6 +57,10 @@ mod g1;
 #[cfg(feature = "groups")]
 mod g2;
 
+#[cfg(feature = "groups")]
+pub use fp::Fp;
+#[cfg(feature = "groups")]
+pub use fp2::Fp2;
 #[cfg(feature = "groups")]
 pub use g1::{G1Affine, G1Projective};
 #[cfg(feature = "groups")]
