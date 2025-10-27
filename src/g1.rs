@@ -478,7 +478,7 @@ impl G1Affine {
             }
         }
     }
-    
+
     #[inline(always)]
     pub fn double(mut self) -> Self {
         if self.is_identity().into() {
@@ -500,7 +500,7 @@ impl G1Affine {
                 G1Affine::from(res)
             }
         }
-    } 
+    }
 }
 
 /// A nontrivial third root of unity in Fp
@@ -1135,6 +1135,30 @@ impl PartialEq for G1Uncompressed {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
         bool::from(self.ct_eq(other))
+    }
+}
+
+impl G1Projective {
+    pub fn random(mut rng: impl RngCore) -> Self {
+        loop {
+            let x = Fp::random(&mut rng);
+            let flip_sign = rng.next_u32() % 2 != 0;
+
+            // Obtain the corresponding y-coordinate given x as y = sqrt(x^3 + 4)
+            let p = ((x.square() * x) + B).sqrt().map(|y| G1Affine {
+                x,
+                y: if flip_sign { -y } else { y },
+                infinity: 0.into(),
+            });
+
+            if p.is_some().into() {
+                let p = p.unwrap().to_curve().clear_cofactor();
+
+                if bool::from(!p.is_identity()) {
+                    return p;
+                }
+            }
+        }
     }
 }
 
