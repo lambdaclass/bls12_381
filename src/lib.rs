@@ -51,7 +51,11 @@ pub use scalar::Scalar;
 #[cfg(feature = "groups")]
 pub mod fp;
 #[cfg(feature = "groups")]
+pub use fp::Fp;
+#[cfg(feature = "groups")]
 pub mod fp2;
+#[cfg(feature = "groups")]
+pub use fp2::Fp2;
 #[cfg(feature = "groups")]
 pub mod g1;
 #[cfg(feature = "groups")]
@@ -65,13 +69,23 @@ pub use g2::{G2Affine, G2Projective};
 #[cfg(feature = "groups")]
 pub mod fp12;
 #[cfg(feature = "groups")]
+pub use fp12::Fp12;
+#[cfg(feature = "groups")]
 pub mod fp6;
+#[cfg(feature = "groups")]
+pub use fp6::Fp6;
 
 // The BLS parameter x for BLS12-381 is -0xd201000000010000
 #[cfg(feature = "groups")]
 const BLS_X: u64 = 0xd201_0000_0001_0000;
 #[cfg(feature = "groups")]
 const BLS_X_IS_NEGATIVE: bool = true;
+
+#[cfg(feature = "groups")]
+pub use group::Group;
+
+pub const MODULUS: Scalar = scalar::MODULUS;
+pub const R2: Scalar = scalar::R2;
 
 #[cfg(feature = "pairings")]
 mod pairings;

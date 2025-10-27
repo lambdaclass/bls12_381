@@ -81,7 +81,7 @@ impl ConditionallySelectable for Scalar {
 
 /// Constant representing the modulus
 /// q = 0x73eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001
-const MODULUS: Scalar = Scalar([
+pub const MODULUS: Scalar = Scalar([
     0xffff_ffff_0000_0001,
     0x53bd_a402_fffe_5bfe,
     0x3339_d808_09a1_d805,
@@ -184,7 +184,7 @@ const R: Scalar = Scalar([
 ]);
 
 /// R^2 = 2^512 mod q
-const R2: Scalar = Scalar([
+pub const R2: Scalar = Scalar([
     0xc999_e990_f3f2_9c6d,
     0x2b6c_edcb_8792_5c23,
     0x05d3_1496_7254_398f,
@@ -552,13 +552,13 @@ impl Scalar {
             }
             let byte_vec = read_vec();
 
-            // Safety: 
+            // Safety:
             //
             // - The byte_vec is guaranteed to be 32 bytes long because we just pushed it,
             // and the executor always pushes to the front of the input buffer.
             //
             // `from_scalar` just clones the bytes before byte_vec is dropped.
-            let bytes = unsafe { &*(byte_vec.as_ptr() as *const [u8;32]) }; 
+            let bytes = unsafe { &*(byte_vec.as_ptr() as *const [u8;32]) };
             let inv = Scalar::from_bytes(bytes).unwrap();
 
             assert!(self * &inv == Scalar::one(), "Invalid hint: Scalar invert");
