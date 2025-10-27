@@ -22,7 +22,7 @@ use {
 // Montgomery form; i.e., Scalar(a) = aR mod p, with R = 2^384.
 #[derive(Copy, Clone)]
 #[repr(transparent)] // NOTE: this is technically required for ensuring the memory layout used in the zkvm precompiles is valid
-pub struct Fp(pub(crate) [u64; 6]);
+pub struct Fp(pub [u64; 6]);
 
 impl fmt::Debug for Fp {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -389,9 +389,9 @@ impl Fp {
             })
             .unwrap();
 
-            // Use a hook to see if we can decompress with the syscall. 
+            // Use a hook to see if we can decompress with the syscall.
             sp1_lib::unconstrained! {
-                sp1_lib::io::write(sp1_lib::io::FD_BLS12_381_SQRT, &self.to_bytes()); 
+                sp1_lib::io::write(sp1_lib::io::FD_BLS12_381_SQRT, &self.to_bytes());
             }
 
             // The first byte is the status of the sqrt syscall.
@@ -445,13 +445,13 @@ impl Fp {
             }
 
             unconstrained! {
-                sp1_lib::io::write(sp1_lib::io::FD_BLS12_381_INVERSE, &self.to_bytes()); 
+                sp1_lib::io::write(sp1_lib::io::FD_BLS12_381_INVERSE, &self.to_bytes());
             }
 
             let byte_vec = read_vec().try_into().unwrap();
 
             let inv = Fp::from_bytes(&byte_vec).unwrap();
-            
+
             assert!(self * &inv == Fp::one(), "Invalid hint: Fp invert");
 
             CtOption::new(inv, Choice::from(1u8))
