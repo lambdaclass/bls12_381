@@ -183,6 +183,22 @@ const B: Fp = Fp::from_raw_unchecked([
 ]);
 
 impl G1Affine {
+    /// Constructs a `G1Affine` point from its raw `x` and `y` coordinates
+    /// without performing any validation (on-curve check, subgroup check, etc.).
+    ///
+    /// # Safety (logical)
+    ///
+    /// The caller must ensure that `(x, y)` is a valid point on the BLS12-381
+    /// G1 curve. Using an invalid point in downstream operations (pairing, MSM,
+    /// etc.) leads to undefined mathematical results.
+    pub fn new_unchecked(x: Fp, y: Fp) -> G1Affine {
+        G1Affine {
+            x,
+            y,
+            infinity: Choice::from(0u8),
+        }
+    }
+
     /// Returns the identity of the group: the point at infinity.
     pub fn identity() -> G1Affine {
         G1Affine {

@@ -196,6 +196,22 @@ const B: Fp2 = Fp2 {
 const B3: Fp2 = Fp2::add(&Fp2::add(&B, &B), &B);
 
 impl G2Affine {
+    /// Constructs a `G2Affine` point from its raw `x` and `y` coordinates
+    /// without performing any validation (on-curve check, subgroup check, etc.).
+    ///
+    /// # Safety (logical)
+    ///
+    /// The caller must ensure that `(x, y)` is a valid point on the BLS12-381
+    /// G2 curve. Using an invalid point in downstream operations (pairing, MSM,
+    /// etc.) leads to undefined mathematical results.
+    pub fn new_unchecked(x: Fp2, y: Fp2) -> G2Affine {
+        G2Affine {
+            x,
+            y,
+            infinity: Choice::from(0u8),
+        }
+    }
+
     /// Returns the identity of the group: the point at infinity.
     pub fn identity() -> G2Affine {
         G2Affine {
